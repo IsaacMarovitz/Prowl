@@ -1,7 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
-using HexaEngine.ImGuizmoNET;
-using HexaEngine.ImNodesNET;
-using HexaEngine.ImPlotNET;
+﻿using ImGuiNET;
 using Prowl.Icons;
 using Prowl.Runtime;
 using Silk.NET.Input;
@@ -9,6 +6,7 @@ using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 using System.Reflection;
+using ImGui = ImGuiNET.ImGui;
 
 namespace Prowl.Editor.ImGUI
 {
@@ -21,8 +19,8 @@ namespace Prowl.Editor.ImGUI
         private readonly List<char> _pressedChars = new List<char>();
         private IKeyboard _keyboard;
 
-        private ImNodesContextPtr nodesContext;
-        private ImPlotContextPtr plotContext;
+        // private ImNodesContextPtr nodesContext;
+        // private ImPlotContextPtr plotContext;
 
         private int _attribLocationTex;
         private int _attribLocationProjMtx;
@@ -39,7 +37,7 @@ namespace Prowl.Editor.ImGUI
         private int _windowWidth;
         private int _windowHeight;
 
-        public ImGuiContextPtr Context;
+        public IntPtr Context;
 
         /// <summary>
         /// Constructs a new ImGuiController.
@@ -55,7 +53,7 @@ namespace Prowl.Editor.ImGUI
         {
             Init(gl, view, input);
 
-            var io = ImGui.GetIO(); 
+            var io = ImGui.GetIO();
 
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Prowl.Editor.EmbeddedResources.font.ttf")) {
                 string tempFilePath = Path.Combine(Path.GetTempPath(), "font.ttf");
@@ -97,26 +95,26 @@ namespace Prowl.Editor.ImGUI
             Context = ImGui.CreateContext();
             ImGui.SetCurrentContext(Context);
             ImGui.StyleColorsDark();
-
-            ImGuizmo.SetImGuiContext(Context);
-            ImGuizmo.AllowAxisFlip(false);
-            ImPlot.SetImGuiContext(Context);
-            ImNodes.SetImGuiContext(Context);
-
-            nodesContext = ImNodes.CreateContext();
-            ImNodes.SetCurrentContext(nodesContext);
-            ImNodes.StyleColorsDark(ImNodes.GetStyle());
-
-            plotContext = ImPlot.CreateContext();
-            ImPlot.SetCurrentContext(plotContext);
-            ImPlot.StyleColorsDark(ImPlot.GetStyle());
+            //
+            // ImGuizmo.SetImGuiContext(Context);
+            // ImGuizmo.AllowAxisFlip(false);
+            // ImPlot.SetImGuiContext(Context);
+            // ImNodes.SetImGuiContext(Context);
+            //
+            // nodesContext = ImNodes.CreateContext();
+            // ImNodes.SetCurrentContext(nodesContext);
+            // ImNodes.StyleColorsDark(ImNodes.GetStyle());
+            //
+            // plotContext = ImPlot.CreateContext();
+            // ImPlot.SetCurrentContext(plotContext);
+            // ImPlot.StyleColorsDark(ImPlot.GetStyle());
 
         }
 
         private void BeginFrame()
         {
-            ImGui.NewFrame();
-            ImGuizmo.BeginFrame();
+            // ImGui.NewFrame();
+            // ImGuizmo.BeginFrame();
             _frameBegun = true;
             _keyboard = _input.Keyboards[0];
             _view.Resize += WindowResized;
@@ -135,14 +133,15 @@ namespace Prowl.Editor.ImGUI
                     string tempFilePath = Path.Combine(Path.GetTempPath(), "tempfont.ttf");
                     using (FileStream fileStream = File.Create(tempFilePath))
                         stream.CopyTo(fileStream);
-                    try {
-                        ImFontConfigPtr fontConfig = ImGui.ImFontConfig();
-                        fontConfig.MergeMode = true;
-                        fontConfig.PixelSnapH = true;
-                        fontConfig.GlyphMinAdvanceX = fontSize;
-                        //var rangeHandle = GCHandle.Alloc(new ushort[] { min, max, 0 }, GCHandleType.Pinned);
-                        char[] ranges = [(char)min, (char)max];
-                        ImGui.GetIO().Fonts.AddFontFromFileTTF(tempFilePath, fontSize, fontConfig, ref ranges[0]);
+                    try
+                    {
+                        // ImFontConfigPtr fontConfig = new ImFontConfigPtr();
+                        // fontConfig.MergeMode = true;
+                        // fontConfig.PixelSnapH = true;
+                        // fontConfig.GlyphMinAdvanceX = fontSize;
+                        // //var rangeHandle = GCHandle.Alloc(new ushort[] { min, max, 0 }, GCHandleType.Pinned);
+                        // char[] ranges = [(char)min, (char)max];
+                        // ImGui.GetIO().Fonts.AddFontFromFileTTF(tempFilePath, fontSize, fontConfig, new IntPtr(ranges[0]));
                         //rangeHandle.Free();
                     } finally {
                         File.Delete(tempFilePath);
@@ -175,7 +174,7 @@ namespace Prowl.Editor.ImGUI
                 }
 
                 _frameBegun = false;
-                ImGui.Render();
+                // ImGui.Render();
                 RenderImDrawData(ImGui.GetDrawData());
 
                 if (oldCtx != Context) {
@@ -196,21 +195,21 @@ namespace Prowl.Editor.ImGUI
             }
 
             if (_frameBegun) {
-                ImGui.Render();
+                // ImGui.Render();
             }
 
             SetPerFrameImGuiData(deltaSeconds);
             UpdateImGuiInput();
 
             _frameBegun = true;
-            ImGui.NewFrame();
-            ImGuizmo.BeginFrame();
+            // ImGui.NewFrame();
+            //ImGuizmo.BeginFrame();
 
             if (oldCtx != Context) {
                 ImGui.SetCurrentContext(oldCtx);
-                ImGuizmo.SetImGuiContext(oldCtx);
-                ImPlot.SetImGuiContext(oldCtx);
-                ImNodes.SetImGuiContext(oldCtx);
+                // ImGuizmo.SetImGuiContext(oldCtx);
+                // ImPlot.SetImGuiContext(oldCtx);
+                // ImNodes.SetImGuiContext(oldCtx);
             }
         }
 
@@ -252,7 +251,7 @@ namespace Prowl.Editor.ImGUI
                 if (key == Key.Unknown) {
                     continue;
                 }
-                io.KeysDown[(int)key] = keyboardState.IsKeyPressed(key);
+                // io.ke[(int)key] = keyboardState.IsKeyPressed(key);
             }
 
             foreach (var c in _pressedChars) {
@@ -275,25 +274,25 @@ namespace Prowl.Editor.ImGUI
         private static void SetKeyMappings()
         {
             var io = ImGui.GetIO();
-            io.KeyMap[(int)ImGuiKey.Tab] = (int)Key.Tab;
-            io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Key.Left;
-            io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Key.Right;
-            io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Key.Up;
-            io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Key.Down;
-            io.KeyMap[(int)ImGuiKey.PageUp] = (int)Key.PageUp;
-            io.KeyMap[(int)ImGuiKey.PageDown] = (int)Key.PageDown;
-            io.KeyMap[(int)ImGuiKey.Home] = (int)Key.Home;
-            io.KeyMap[(int)ImGuiKey.End] = (int)Key.End;
-            io.KeyMap[(int)ImGuiKey.Delete] = (int)Key.Delete;
-            io.KeyMap[(int)ImGuiKey.Backspace] = (int)Key.Backspace;
-            io.KeyMap[(int)ImGuiKey.Enter] = (int)Key.Enter;
-            io.KeyMap[(int)ImGuiKey.Escape] = (int)Key.Escape;
-            io.KeyMap[(int)ImGuiKey.A] = (int)Key.A;
-            io.KeyMap[(int)ImGuiKey.C] = (int)Key.C;
-            io.KeyMap[(int)ImGuiKey.V] = (int)Key.V;
-            io.KeyMap[(int)ImGuiKey.X] = (int)Key.X;
-            io.KeyMap[(int)ImGuiKey.Y] = (int)Key.Y;
-            io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
+            // io.KeyMap[(int)ImGuiKey.Tab] = (int)Key.Tab;
+            // io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Key.Left;
+            // io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Key.Right;
+            // io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Key.Up;
+            // io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Key.Down;
+            // io.KeyMap[(int)ImGuiKey.PageUp] = (int)Key.PageUp;
+            // io.KeyMap[(int)ImGuiKey.PageDown] = (int)Key.PageDown;
+            // io.KeyMap[(int)ImGuiKey.Home] = (int)Key.Home;
+            // io.KeyMap[(int)ImGuiKey.End] = (int)Key.End;
+            // io.KeyMap[(int)ImGuiKey.Delete] = (int)Key.Delete;
+            // io.KeyMap[(int)ImGuiKey.Backspace] = (int)Key.Backspace;
+            // io.KeyMap[(int)ImGuiKey.Enter] = (int)Key.Enter;
+            // io.KeyMap[(int)ImGuiKey.Escape] = (int)Key.Escape;
+            // io.KeyMap[(int)ImGuiKey.A] = (int)Key.A;
+            // io.KeyMap[(int)ImGuiKey.C] = (int)Key.C;
+            // io.KeyMap[(int)ImGuiKey.V] = (int)Key.V;
+            // io.KeyMap[(int)ImGuiKey.X] = (int)Key.X;
+            // io.KeyMap[(int)ImGuiKey.Y] = (int)Key.Y;
+            // io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
         }
 
         private unsafe void SetupRenderState(ImDrawDataPtr drawDataPtr, int framebufferWidth, int framebufferHeight)
@@ -402,7 +401,7 @@ namespace Prowl.Editor.ImGUI
 
             // Render command lists
             for (int n = 0; n < drawDataPtr.CmdListsCount; n++) {
-                ImDrawListPtr cmdListPtr = drawDataPtr.CmdLists.Data[n];
+                ImDrawListPtr cmdListPtr = drawDataPtr.CmdLists.Data;
 
                 // Upload vertex/index buffers
 
@@ -412,30 +411,30 @@ namespace Prowl.Editor.ImGUI
                 Graphics.CheckGL();
 
                 for (int cmd_i = 0; cmd_i < cmdListPtr.CmdBuffer.Size; cmd_i++) {
-                    var cmdPtr = cmdListPtr.CmdBuffer.Data[cmd_i];
-
-                    if (cmdPtr.UserCallback != null) {
-                        throw new NotImplementedException();
-                    } else {
-                        Vector4 clipRect;
-                        clipRect.x = (cmdPtr.ClipRect.X - clipOff.x) * clipScale.x;
-                        clipRect.y = (cmdPtr.ClipRect.Y - clipOff.y) * clipScale.y;
-                        clipRect.z = (cmdPtr.ClipRect.Z - clipOff.x) * clipScale.x;
-                        clipRect.w = (cmdPtr.ClipRect.W - clipOff.y) * clipScale.y;
-
-                        if (clipRect.x < framebufferWidth && clipRect.y < framebufferHeight && clipRect.z >= 0.0f && clipRect.w >= 0.0f) {
-                            // Apply scissor/clipping rectangle
-                            _gl.Scissor((int)clipRect.x, (int)(framebufferHeight - clipRect.w), (uint)(clipRect.z - clipRect.x), (uint)(clipRect.w - clipRect.y));
-                            Graphics.CheckGL();
-
-                            // Bind texture, Draw
-                            _gl.BindTexture(GLEnum.Texture2D, (uint)cmdPtr.TextureId.Handle);
-                            Graphics.CheckGL();
-
-                            _gl.DrawElementsBaseVertex(GLEnum.Triangles, cmdPtr.ElemCount, GLEnum.UnsignedShort, (void*)(cmdPtr.IdxOffset * sizeof(ushort)), (int)cmdPtr.VtxOffset);
-                            Graphics.CheckGL();
-                        }
-                    }
+                    var cmdPtr = cmdListPtr.CmdBuffer.Data;
+                    //
+                    // if (cmdPtr.UserCallback != null) {
+                    //     throw new NotImplementedException();
+                    // } else {
+                    //     Vector4 clipRect;
+                    //     clipRect.x = (cmdPtr.ClipRect.X - clipOff.x) * clipScale.x;
+                    //     clipRect.y = (cmdPtr.ClipRect.Y - clipOff.y) * clipScale.y;
+                    //     clipRect.z = (cmdPtr.ClipRect.Z - clipOff.x) * clipScale.x;
+                    //     clipRect.w = (cmdPtr.ClipRect.W - clipOff.y) * clipScale.y;
+                    //
+                    //     if (clipRect.x < framebufferWidth && clipRect.y < framebufferHeight && clipRect.z >= 0.0f && clipRect.w >= 0.0f) {
+                    //         // Apply scissor/clipping rectangle
+                    //         _gl.Scissor((int)clipRect.x, (int)(framebufferHeight - clipRect.w), (uint)(clipRect.z - clipRect.x), (uint)(clipRect.w - clipRect.y));
+                    //         Graphics.CheckGL();
+                    //
+                    //         // Bind texture, Draw
+                    //         _gl.BindTexture(GLEnum.Texture2D, (uint)cmdPtr.TextureId.Handle);
+                    //         Graphics.CheckGL();
+                    //
+                    //         _gl.DrawElementsBaseVertex(GLEnum.Triangles, cmdPtr.ElemCount, GLEnum.UnsignedShort, (void*)(cmdPtr.IdxOffset * sizeof(ushort)), (int)cmdPtr.VtxOffset);
+                    //         Graphics.CheckGL();
+                    //     }
+                    // }
                 }
             }
 
@@ -564,19 +563,19 @@ namespace Prowl.Editor.ImGUI
             byte* pixels;
             int width;
             int height;
-            io.Fonts.GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bit (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
+            // io.Fonts.GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bit (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
 
             // Upload texture to graphics system
             _gl.GetInteger(GLEnum.TextureBinding2D, out int lastTexture);
 
-            _fontTexture = new Texture2D((uint)width, (uint)height, false, Runtime.Texture.TextureImageFormat.Float4);
-            Graphics.GL.BindTexture(TextureTarget.Texture2D, _fontTexture.Handle);
-            Graphics.GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, (uint)width, (uint)height, Silk.NET.OpenGL.PixelFormat.Rgba, Silk.NET.OpenGL.PixelType.UnsignedByte, pixels);
+            // _fontTexture = new Texture2D((uint)width, (uint)height, false, Runtime.Texture.TextureImageFormat.Float4);
+            // Graphics.GL.BindTexture(TextureTarget.Texture2D, _fontTexture.Handle);
+            // Graphics.GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, (uint)width, (uint)height, Silk.NET.OpenGL.PixelFormat.Rgba, Silk.NET.OpenGL.PixelType.UnsignedByte, pixels);
             Graphics.CheckGL();
-            _fontTexture.SetTextureFilters(TextureMinFilter.Linear, TextureMagFilter.Linear);
+            // _fontTexture.SetTextureFilters(TextureMinFilter.Linear, TextureMagFilter.Linear);
 
             // Store our identifier
-            io.Fonts.SetTexID((IntPtr)_fontTexture.Handle);
+            // io.Fonts.SetTexID((IntPtr)_fontTexture.Handle);
 
             // Restore state
             _gl.BindTexture(GLEnum.Texture2D, (uint)lastTexture);
@@ -597,7 +596,7 @@ namespace Prowl.Editor.ImGUI
             _fontTexture.Dispose();
             _gl.DeleteProgram(_shader);
 
-            ImNodes.DestroyContext();
+            // ImNodes.DestroyContext();
             ImGui.DestroyContext(Context);
         }
 

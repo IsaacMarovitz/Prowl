@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using Prowl.Icons;
 using Prowl.Runtime;
 
@@ -140,7 +140,7 @@ namespace Prowl.Editor
             var style = ImGui.GetStyle();
             var storage = ImGui.GetStateStorage();
 
-            int id = ImGui.GetID(label);
+            uint id = ImGui.GetID(label);
             int opened = storage.GetInt(id, 0);
             float x = ImGui.GetCursorPosX();
             ImGui.BeginGroup();
@@ -193,7 +193,7 @@ namespace Prowl.Editor
                 max.X += expand;
                 max.Y += expand;
             }
-            ImGui.GetWindowDrawList().AddRect(min, max, ImGui.GetColorU32(new Vector4(r, g, b, a)), roundness, thickness);
+            ImGui.GetWindowDrawList().AddRect(min, max, ImGui.GetColorU32(new Vector4(r, g, b, a)), roundness, ImDrawFlags.None);
         }
 
         public static bool Search(string v, ref string searchText, float x)
@@ -217,7 +217,7 @@ namespace Prowl.Editor
             unsafe
             {
                 fixed (double* v = &value)
-                    return ImGui.DragScalar(v1, ImGuiDataType.Double, v, v2, "%g");
+                    return ImGui.DragScalar(v1, ImGuiDataType.Double, new IntPtr(v), v2, IntPtr.Zero);
             }
         }
     }

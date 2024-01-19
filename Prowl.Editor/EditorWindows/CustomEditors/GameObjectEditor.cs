@@ -1,5 +1,5 @@
 ﻿using Assimp;
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Editor.Assets;
 using Prowl.Editor.PropertyDrawers;
 using Prowl.Runtime;
@@ -243,7 +243,7 @@ namespace Prowl.Editor.EditorWindows.CustomEditors
             }
 
             if (PlayMode.Current != PlayMode.Mode.Editing) return; // Cannot create scripts during playmode
-             
+
             // is first and found no component and were searching, lets create a new script
             if (hasSearch && !foundName && menuItem == rootMenuItem)
             {

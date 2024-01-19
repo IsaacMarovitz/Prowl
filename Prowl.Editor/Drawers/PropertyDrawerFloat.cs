@@ -1,7 +1,7 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Runtime;
 
-namespace Prowl.Editor.PropertyDrawers; 
+namespace Prowl.Editor.PropertyDrawers;
 
 public class PropertyDrawerDouble : PropertyDrawer<double> {
 
@@ -14,7 +14,7 @@ public class PropertyDrawerDouble : PropertyDrawer<double> {
         ImGui.Columns(1);
         return changed;
     }
-    
+
 }
 
 public class PropertyDrawerFloat : PropertyDrawer<float> {
@@ -27,7 +27,7 @@ public class PropertyDrawerFloat : PropertyDrawer<float> {
         ImGui.Columns(1);
         return changed;
     }
-    
+
 }
 
 public class PropertyDrawerInt : PropertyDrawer<int> {
@@ -40,7 +40,7 @@ public class PropertyDrawerInt : PropertyDrawer<int> {
         ImGui.Columns(1);
         return changed;
     }
-    
+
 }
 
 public class PropertyDrawerShort : PropertyDrawer<short> {

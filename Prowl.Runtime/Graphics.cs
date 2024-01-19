@@ -70,14 +70,14 @@ namespace Prowl.Runtime
                 if (OperatingSystem.IsWindows())
                     GL.DebugMessageCallback(DebugCallback, null);
             }
-            GL.Enable(EnableCap.DebugOutput);
-            GL.Enable(EnableCap.DebugOutputSynchronous);
+            // GL.Enable(EnableCap.DebugOutput);
+            // GL.Enable(EnableCap.DebugOutputSynchronous);
 
             // Smooth lines
-            GL.Enable(EnableCap.LineSmooth);
+            // GL.Enable(EnableCap.LineSmooth);
 
-            GLMajorVersion = GL.GetInteger(GLEnum.MajorVersion);
-            GLMinorVersion = GL.GetInteger(GLEnum.MinorVersion);
+            // GLMajorVersion = GL.GetInteger(GLEnum.MajorVersion);
+            // GLMinorVersion = GL.GetInteger(GLEnum.MinorVersion);
 
             CheckGL();
 

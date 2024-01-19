@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Editor.EditorWindows;
 using Prowl.Runtime;
 using System.Reflection;
@@ -182,7 +182,7 @@ public static class EditorGui
                     var group = (imGuiAttribute as StartGroupAttribute);
                     GUIHelper.TextCenter(group.name, group.headerSize);
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 2);
-                    ImGui.BeginChild(group.name, new System.Numerics.Vector2(-1, group.height), true, group.collapsable ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoCollapse);
+                    ImGui.BeginChild(group.name, new System.Numerics.Vector2(-1, group.height), ImGuiChildFlags.None, group.collapsable ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoCollapse);
                     break;
 
             }

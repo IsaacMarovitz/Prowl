@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 
 namespace Prowl.Editor.PropertyDrawers;
 
@@ -16,5 +16,5 @@ public class PropertyDrawerString : PropertyDrawer<string?> {
         ImGui.Columns(1);
         return changed;
     }
-    
+
 }

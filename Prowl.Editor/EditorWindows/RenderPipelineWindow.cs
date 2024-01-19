@@ -1,5 +1,5 @@
-﻿using HexaEngine.ImGuiNET;
-using Prowl.Editor.Drawers.NodeSystem;
+﻿using ImGuiNET;
+// using Prowl.Editor.Drawers.NodeSystem;
 using Prowl.Icons;
 using Prowl.Runtime;
 using Prowl.Runtime.Assets;
@@ -28,14 +28,14 @@ public class RenderPipelineWindow : EditorWindow
         if (CurrentRenderPipeline.IsAvailable == false) return;
 
         var size = changed ? new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - 30) : ImGui.GetContentRegionAvail();
-        ImGui.BeginChild("RenderPipeline", size, true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
-        bool changedThisFrame = NodeSystemDrawer.Draw(CurrentRenderPipeline.Res);
+        ImGui.BeginChild("RenderPipeline", size, ImGuiChildFlags.None, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        // bool changedThisFrame = NodeSystemDrawer.Draw(CurrentRenderPipeline.Res);
         ImGui.EndChild();
 
-        if(changedThisFrame)
-            CurrentRenderPipeline.Res!.OnValidate();
-
-        changed |= changedThisFrame;
+        // if(changedThisFrame)
+        //     CurrentRenderPipeline.Res!.OnValidate();
+        //
+        // changed |= changedThisFrame;
 
         if (changed)
         {

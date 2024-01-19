@@ -1,11 +1,11 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Runtime;
 using System.Reflection;
 using System.Text;
 namespace Prowl.Editor.PropertyDrawers;
 
 public abstract class PropertyDrawer {
-    
+
     private static readonly Dictionary<Type, PropertyDrawer> _propertyDrawerLookup = new();
     protected internal abstract Type PropertyType { get; }
     protected internal abstract bool Draw_Internal(string label, ref object value, float width);
@@ -55,7 +55,7 @@ public abstract class PropertyDrawer {
         ImGui.PopID();
         return changed;
     }
-    
+
     public static void ClearLookUp() {
         _propertyDrawerLookup.Clear();
     }
@@ -85,9 +85,9 @@ public abstract class PropertyDrawer {
 }
 
 public abstract class PropertyDrawer<T> : PropertyDrawer {
-    
+
     protected internal sealed override Type PropertyType => typeof(T);
-    
+
     protected internal sealed override bool Draw_Internal(string label, ref object value, float width) {
         T typedValue = (T)value;
         var old = value;
@@ -98,15 +98,15 @@ public abstract class PropertyDrawer<T> : PropertyDrawer {
         if (old == null && value == null) return false;
         else if (old == null && value != null) return true;
         else if (old.Equals(value) == false) return true; // Returns true if has been modified
-        
+
         return changed;
     }
-    
+
     protected abstract bool Draw(string label, ref T? value, float width);
-    
+
     protected void DrawLabel(string label, ref float width)
     {
-        ImGui.Columns(2, false);
+        ImGui.Columns(2, "%g");
         ImGui.PushStyleColor(ImGuiCol.Text, new System.Numerics.Vector4(0.8f, 0.8f, 0.8f, 1f));
         ImGui.Text(Prettify(label));
         ImGui.PopStyleColor();

@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using System.Numerics;
 
 // Ported to c#: https://github.com/Limeoats/L2DFileDialog - Apache-2.0 license
@@ -74,7 +74,7 @@ namespace Prowl.Editor
         private static void Sort(ImFileDialogInfo dialogInfo, bool forceSort = false)
         {
             //var directories = dialogInfo.currentDirectories;
-            //var files = dialogInfo.currentFiles;            
+            //var files = dialogInfo.currentFiles;
             bool sort = false;
 
             if (fileNameSortOrderCopy != fileNameSortOrder)
@@ -217,7 +217,7 @@ namespace Prowl.Editor
 
                 float contentRegionWidth = ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X;
 
-                ImGui.BeginChild("##browser", new Vector2(contentRegionWidth, 300), true, ImGuiWindowFlags.HorizontalScrollbar);
+                ImGui.BeginChild("##browser", new Vector2(contentRegionWidth, 300), ImGuiChildFlags.None, ImGuiWindowFlags.HorizontalScrollbar);
                 ImGui.Columns(4);
 
                 // Columns size

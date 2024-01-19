@@ -1,5 +1,4 @@
-using HexaEngine.ImGuiNET;
-using HexaEngine.ImGuizmoNET;
+using ImGuiNET;
 using Jitter2.LinearMath;
 using Prowl.Editor.ImGUI.Widgets;
 using Prowl.Icons;
@@ -17,8 +16,8 @@ public class ViewportWindow : EditorWindow
 
     public static Camera LastFocusedCamera;
 
-    public static ImGuizmoOperation GizmosOperation = ImGuizmoOperation.Translate;
-    public static ImGuizmoMode GizmosSpace = ImGuizmoMode.Local;
+    // public static ImGuizmoOperation GizmosOperation = ImGuizmoOperation.Translate;
+    // public static ImGuizmoMode GizmosSpace = ImGuizmoMode.Local;
 
 
     Camera Cam;
@@ -113,7 +112,7 @@ public class ViewportWindow : EditorWindow
         // Flip Y
         mouseUV.y = 1.0 - mouseUV.y;
 
-        if (ImGui.IsItemClicked() && !ImGuizmo.IsOver()) {
+        if (ImGui.IsItemClicked() /*&& !ImGuizmo.IsOver()*/) {
             var instanceID = Cam.gBuffer.GetObjectIDAt(mouseUV);
             if (instanceID != 0) {
                 // find InstanceID Object
@@ -134,10 +133,10 @@ public class ViewportWindow : EditorWindow
             }
         }
 
-        ImGuizmo.SetDrawlist();
-        ImGuizmo.Enable(true);
-        ImGuizmo.SetOrthographic(false);
-        ImGuizmo.SetRect(ImGui.GetWindowPos().X, ImGui.GetWindowPos().Y, windowSize.X, windowSize.Y);
+        // ImGuizmo.SetDrawlist();
+        // ImGuizmo.Enable(true);
+        // ImGuizmo.SetOrthographic(false);
+        // ImGuizmo.SetRect(ImGui.GetWindowPos().X, ImGui.GetWindowPos().Y, windowSize.X, windowSize.Y);
 
 #warning TODO: Camera rendering clears Gizmos untill the rendering overhaul, so gizmos will Flicker here
         Camera.Current = Cam;
@@ -146,23 +145,23 @@ public class ViewportWindow : EditorWindow
                 DrawGizmos(activeGO, view, projection, HierarchyWindow.SelectHandler.IsSelected(new WeakReference(activeGO)));
         Camera.Current = null;
 
-        ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5, 5));
-        if (ImGui.Button($"{FontAwesome6.ArrowsUpDownLeftRight}")) GizmosOperation = ImGuizmoOperation.Translate;
-        GUIHelper.Tooltip("Translate");
-        ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (27), 5));
-        if (ImGui.Button($"{FontAwesome6.ArrowsSpin}")) GizmosOperation = ImGuizmoOperation.Rotate;
-        GUIHelper.Tooltip("Rotate");
-        ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (54), 5));
-        if (ImGui.Button($"{FontAwesome6.GroupArrowsRotate}")) GizmosOperation = ImGuizmoOperation.Scale;
-        GUIHelper.Tooltip("Scale");
-
-        ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (81), 5));
-
-        if      (GizmosSpace == ImGuizmoMode.World && ImGui.Button($"{FontAwesome6.Globe}"))
-            GizmosSpace = ImGuizmoMode.Local;
-        else if (GizmosSpace == ImGuizmoMode.Local && ImGui.Button($"{FontAwesome6.Cube}"))
-            GizmosSpace = ImGuizmoMode.World;
-        GUIHelper.Tooltip(GizmosSpace.ToString());
+        // ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5, 5));
+        // if (ImGui.Button($"{FontAwesome6.ArrowsUpDownLeftRight}")) GizmosOperation = ImGuizmoOperation.Translate;
+        // GUIHelper.Tooltip("Translate");
+        // ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (27), 5));
+        // if (ImGui.Button($"{FontAwesome6.ArrowsSpin}")) GizmosOperation = ImGuizmoOperation.Rotate;
+        // GUIHelper.Tooltip("Rotate");
+        // ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (54), 5));
+        // if (ImGui.Button($"{FontAwesome6.GroupArrowsRotate}")) GizmosOperation = ImGuizmoOperation.Scale;
+        // GUIHelper.Tooltip("Scale");
+        //
+        // ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (81), 5));
+        //
+        // if      (GizmosSpace == ImGuizmoMode.World && ImGui.Button($"{FontAwesome6.Globe}"))
+        //     GizmosSpace = ImGuizmoMode.Local;
+        // else if (GizmosSpace == ImGuizmoMode.Local && ImGui.Button($"{FontAwesome6.Cube}"))
+        //     GizmosSpace = ImGuizmoMode.World;
+        // GUIHelper.Tooltip(GizmosSpace.ToString());
 
         ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5 + (115), 5));
         ImGui.SetNextItemWidth(23);
@@ -178,7 +177,7 @@ public class ViewportWindow : EditorWindow
         ImGui.SetCursorPos(cStart + new System.Numerics.Vector2(5, 25));
         ImGui.Text("FPS: " + fps.ToString("0.00"));
 
-        ImGuizmo.ViewManipulate(ref view, 1, new Vector2(ImGui.GetWindowPos().X + windowSize.X - 75, ImGui.GetWindowPos().Y + 15 + 75), new Vector2(75, -75), 0x10101010);
+        // ImGuizmo.ViewManipulate(ref view, 1, new Vector2(ImGui.GetWindowPos().X + windowSize.X - 75, ImGui.GetWindowPos().Y + 15 + 75), new Vector2(75, -75), 0x10101010);
         System.Numerics.Matrix4x4.Invert(view, out var iview);
         System.Numerics.Matrix4x4.Decompose(iview, out var scale, out var rot, out var pos);
         //Cam.GameObject.Local = iview.ToDouble();
@@ -210,17 +209,17 @@ public class ViewportWindow : EditorWindow
 
                 // Perform ImGuizmo manipulation
                 var fmat = goMatrix.ToFloat();
-                if (ImGuizmo.Manipulate(ref view, ref projection, GizmosOperation, GizmosSpace, ref fmat, null, snap, localBound, snap))
-                {
-                    goMatrix = fmat.ToDouble();
-                    // decompose
-                    Matrix4x4.Decompose(goMatrix, out var scale, out var rot, out var pos);
-                    go.transform.position = pos;
-                    go.transform.rotation = rot;
-                    go.transform.localScale = scale;
-
-                    //go.Global = goMatrix;
-                }
+                // if (ImGuizmo.Manipulate(ref view, ref projection, GizmosOperation, GizmosSpace, ref fmat, null, snap, localBound, snap))
+                // {
+                //     goMatrix = fmat.ToDouble();
+                //     // decompose
+                //     Matrix4x4.Decompose(goMatrix, out var scale, out var rot, out var pos);
+                //     go.transform.position = pos;
+                //     go.transform.rotation = rot;
+                //     go.transform.localScale = scale;
+                //
+                //     //go.Global = goMatrix;
+                // }
             }
         }
 
@@ -262,8 +261,9 @@ public class ViewportWindow : EditorWindow
 
         LastFocusedCamera = Cam;
 
-        if (Input.GetMouseButton(1)) {
-            ImGui.FocusWindow(ImGUIWindow, ImGuiFocusRequestFlags.None);
+        if (Input.GetMouseButton(1))
+        {
+            ImGui.SetWindowFocus();
 
             Vector3 moveDir = Vector3.zero;
             if (Input.GetKey(Key.W)) moveDir += Cam.GameObject.transform.forward;
@@ -293,7 +293,7 @@ public class ViewportWindow : EditorWindow
             rot.y += mouseDelta.X * (Time.deltaTimeF * 5f * Settings.LookSensitivity);
             rot.x += mouseDelta.Y * (Time.deltaTimeF * 5f * Settings.LookSensitivity);
             Cam.GameObject.transform.eulerAngles = rot;
-             
+
             Input.MousePosition = WindowCenter.ToFloat().ToGeneric();
         } else {
             moveSpeed = 1;
@@ -322,11 +322,11 @@ public class ViewportWindow : EditorWindow
             } else if (IsFocused) {
 
                 // If not looking around Viewport Keybinds are used instead
-                if      (Input.GetKeyDown(Key.Q)) GizmosOperation = ImGuizmoOperation.Translate;
-                else if (Input.GetKeyDown(Key.W)) GizmosOperation = ImGuizmoOperation.Rotate;
-                else if (Input.GetKeyDown(Key.E)) GizmosOperation = ImGuizmoOperation.Scale;
-                else if (Input.GetKeyDown(Key.R)) GizmosOperation = ImGuizmoOperation.Universal;
-                else if (Input.GetKeyDown(Key.T)) GizmosOperation = ImGuizmoOperation.Bounds;
+                // if      (Input.GetKeyDown(Key.Q)) GizmosOperation = ImGuizmoOperation.Translate;
+                // else if (Input.GetKeyDown(Key.W)) GizmosOperation = ImGuizmoOperation.Rotate;
+                // else if (Input.GetKeyDown(Key.E)) GizmosOperation = ImGuizmoOperation.Scale;
+                // else if (Input.GetKeyDown(Key.R)) GizmosOperation = ImGuizmoOperation.Universal;
+                // else if (Input.GetKeyDown(Key.T)) GizmosOperation = ImGuizmoOperation.Bounds;
 
             }
         }

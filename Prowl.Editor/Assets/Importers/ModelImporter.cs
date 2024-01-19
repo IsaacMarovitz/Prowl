@@ -1,5 +1,5 @@
 ﻿using Assimp;
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Runtime;
 using Prowl.Runtime.Assets;
 using Prowl.Runtime.Utils;
@@ -405,7 +405,7 @@ namespace Prowl.Editor.Assets
             GOs.Add((uOb, node));
             uOb.Name = node.Name;
 
-            if (node.HasChildren) 
+            if (node.HasChildren)
                 foreach (var cn in node.Children)
                 {
                     var go = GetNodes(cn, ref GOs);

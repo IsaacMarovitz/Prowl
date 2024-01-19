@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using Prowl.Editor.PropertyDrawers;
 using Prowl.Runtime;
 using Prowl.Runtime.Assets;
@@ -110,7 +110,7 @@ namespace Prowl.Editor.Assets
                                 {
                                     path = "(Null)";
                                     drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new System.Numerics.Vector4(0.9f, 0.1f, 0.1f, 0.3f)));
-                                    if (ImGui.Selectable("##" + path, false, new System.Numerics.Vector2(50, 50)))
+                                    if (ImGui.Selectable("##" + path, false, ImGuiSelectableFlags.None))
                                         AssetDatabase.Ping(tex.AssetID);
                                     GUIHelper.Tooltip(path);
                                 }
@@ -118,7 +118,7 @@ namespace Prowl.Editor.Assets
                                 {
                                     path = "(Runtime)" + tex.Name;
                                     drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new System.Numerics.Vector4(0.1f, 0.1f, 0.9f, 0.3f)));
-                                    if (ImGui.Selectable("##" + path, false, new System.Numerics.Vector2(50, 50)))
+                                    if (ImGui.Selectable("##" + path, false, ImGuiSelectableFlags.None))
                                         AssetDatabase.Ping(tex.AssetID);
                                         GUIHelper.Tooltip(path);
                                     }
@@ -128,9 +128,9 @@ namespace Prowl.Editor.Assets
                                     var thumbnail = Application.AssetProvider.LoadAsset<Texture2D>(tex);
                                     var cPos = ImGui.GetCursorScreenPos();
                                     ImGui.SetCursorScreenPos(new System.Numerics.Vector2(cPos.X, cPos.Y + 50));
-                                    ImGui.Image(new ImTextureID((nint)thumbnail.Handle), new System.Numerics.Vector2(50, -50));
+                                    ImGui.Image((nint)thumbnail.Handle, new System.Numerics.Vector2(50, -50));
                                     ImGui.SetCursorScreenPos(cPos);
-                                    if (ImGui.Selectable("##" + path, false, new System.Numerics.Vector2(50, 50)))
+                                    if (ImGui.Selectable("##" + path, false, ImGuiSelectableFlags.None))
                                         AssetDatabase.Ping(tex.AssetID);
                                     GUIHelper.Tooltip(path);
                                 }

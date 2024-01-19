@@ -1,6 +1,5 @@
-using HexaEngine.ImGuiNET;
 using Prowl.Editor.Assets;
-using Prowl.Editor.Drawers.NodeSystem;
+// using Prowl.Editor.Drawers.NodeSystem;
 using Prowl.Editor.EditorWindows;
 using Prowl.Editor.ImGUI;
 using Prowl.Editor.PropertyDrawers;
@@ -10,6 +9,7 @@ using Prowl.Runtime.Assets;
 using Prowl.Runtime.SceneManagement;
 using Silk.NET.Input;
 using System.Text.Json;
+using ImGuiNET;
 using static Prowl.Editor.EditorConfiguration;
 
 namespace Prowl.Editor;
@@ -108,38 +108,36 @@ public unsafe class EditorApplication : Application {
 
                 imguiController.Update((float)delta);
 
-                int dockspaceID = ImGui.DockSpaceOverViewport();
+                uint dockspaceID = ImGui.DockSpaceOverViewport();
 
                 if (hasDockSetup == false) {
-                    ImGui.DockBuilderRemoveNode(dockspaceID);
-                    ImGui.DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags.None);
-                    ImGui.DockBuilderSetNodeSize(dockspaceID, ImGui.GetMainViewport().Size);
+                    ImGui.DockSpace(dockspaceID, ImGui.GetMainViewport().Size, ImGuiDockNodeFlags.None);
 
-                    int dock_id_main_right = 0;
-                    int dock_id_main_left = 0;
-                    ImGui.DockBuilderSplitNode(dockspaceID, ImGuiDir.Right, 0.17f, ref dock_id_main_right, ref dock_id_main_left);
-
-                    ImGui.DockBuilderDockWindow(FontAwesome6.BookOpen + " Inspector", dock_id_main_right);
-
-                    int dock_id_main_left_top = 0;
-                    int dock_id_main_left_bottom = 0;
-                    ImGui.DockBuilderSplitNode(dock_id_main_left, ImGuiDir.Down, 0.3f, ref dock_id_main_left_bottom, ref dock_id_main_left_top);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.Gamepad + " Game", dock_id_main_left_top);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.Camera + " Viewport", dock_id_main_left_top);
-
-                    int dock_id_main_left_top_left = 0;
-                    int dock_id_main_left_top_right = 0;
-                    ImGui.DockBuilderSplitNode(dock_id_main_left_top, ImGuiDir.Left, 0.2f, ref dock_id_main_left_top_left, ref dock_id_main_left_top_right);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.FolderTree + " Hierarchy", dock_id_main_left_top_left);
-
-                    int dock_id_main_left_bottom_left = 0;
-                    int dock_id_main_left_bottom_right = 0;
-                    ImGui.DockBuilderSplitNode(dock_id_main_left_bottom, ImGuiDir.Left, 0.2f, ref dock_id_main_left_bottom_left, ref dock_id_main_left_bottom_right);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.BoxOpen + " Asset Browser", dock_id_main_left_bottom_right);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.Terminal + " Console", dock_id_main_left_bottom_right);
-                    ImGui.DockBuilderDockWindow(FontAwesome6.FolderTree + " Assets", dock_id_main_left_bottom_left);
-
-                    ImGui.DockBuilderFinish(dockspaceID);
+                    // int dock_id_main_right = 0;
+                    // int dock_id_main_left = 0;
+                    // ImGui.DockBuilderSplitNode(dockspaceID, ImGuiDir.Right, 0.17f, ref dock_id_main_right, ref dock_id_main_left);
+                    //
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.BookOpen + " Inspector", dock_id_main_right);
+                    //
+                    // int dock_id_main_left_top = 0;
+                    // int dock_id_main_left_bottom = 0;
+                    // ImGui.DockBuilderSplitNode(dock_id_main_left, ImGuiDir.Down, 0.3f, ref dock_id_main_left_bottom, ref dock_id_main_left_top);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.Gamepad + " Game", dock_id_main_left_top);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.Camera + " Viewport", dock_id_main_left_top);
+                    //
+                    // int dock_id_main_left_top_left = 0;
+                    // int dock_id_main_left_top_right = 0;
+                    // ImGui.DockBuilderSplitNode(dock_id_main_left_top, ImGuiDir.Left, 0.2f, ref dock_id_main_left_top_left, ref dock_id_main_left_top_right);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.FolderTree + " Hierarchy", dock_id_main_left_top_left);
+                    //
+                    // int dock_id_main_left_bottom_left = 0;
+                    // int dock_id_main_left_bottom_right = 0;
+                    // ImGui.DockBuilderSplitNode(dock_id_main_left_bottom, ImGuiDir.Left, 0.2f, ref dock_id_main_left_bottom_left, ref dock_id_main_left_bottom_right);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.BoxOpen + " Asset Browser", dock_id_main_left_bottom_right);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.Terminal + " Console", dock_id_main_left_bottom_right);
+                    // ImGui.DockBuilderDockWindow(FontAwesome6.FolderTree + " Assets", dock_id_main_left_bottom_left);
+                    //
+                    // ImGui.DockBuilderFinish(dockspaceID);
                     hasDockSetup = true;
                 }
 
@@ -249,7 +247,7 @@ public unsafe class EditorApplication : Application {
                     PropertyDrawer.ClearLookUp();
                     ImporterAttribute.ClearLookUp();
                     CustomEditorAttribute.ClearLookUp();
-                    NodeSystemDrawer.ClearLookUp();
+                    // NodeSystemDrawer.ClearLookUp();
                     MenuItem.ClearMenus();
 
                     // Clear internal .Net Type Cache
@@ -296,7 +294,7 @@ public unsafe class EditorApplication : Application {
                     PropertyDrawer.GenerateLookUp();
                     ImporterAttribute.GenerateLookUp();
                     CustomEditorAttribute.GenerateLookUp();
-                    NodeSystemDrawer.GenerateLookUp();
+                    // NodeSystemDrawer.GenerateLookUp();
                     MenuItem.FindAllMenus();
                     CreateAssetMenuHandler.FindAllMenus(); // Injects into Menuitem so doesnt need to Unload
 

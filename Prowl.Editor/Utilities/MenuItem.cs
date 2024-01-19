@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using System;
 using System.Reflection;
 

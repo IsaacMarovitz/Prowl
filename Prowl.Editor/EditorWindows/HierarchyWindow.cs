@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Icons;
 using Prowl.Runtime;
 using Prowl.Editor.ImGUI.Widgets;
@@ -81,7 +81,7 @@ public class HierarchyWindow : EditorWindow
             ImGui.TableNextRow(ImGuiTableRowFlags.Headers, ImGui.GetFrameHeight());
             for (int column = 0; column < 4; ++column) {
                 ImGui.TableSetColumnIndex(column);
-                string columnName = ImGui.TableGetColumnNameS(column);
+                string columnName = ImGui.TableGetColumnName(column);
                 ImGui.PushID(column);
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + padding.Y);
                 ImGui.TableHeader(columnName);
@@ -172,7 +172,7 @@ public class HierarchyWindow : EditorWindow
         if (isPingedEntity)
         {
             if (pingTimer > PingDuration - 1f)
-                ImGui.ScrollToItem(ImGuiScrollFlags.None);
+                // ImGui.ScrollToItem(ImGuiScrollFlags.None);
             GUIHelper.ItemRect(1f, 0.8f, 0.0f, 0.8f, MathF.Sin(pingTimer) * 1f, 3f, 2.5f);
             GUIHelper.ItemRect(1f, 0.8f, 0.0f, 0.8f, MathF.Sin(pingTimer) * 6f, 3f, 2.5f);
         }

@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Runtime;
 
 namespace Prowl.Editor.PropertyDrawers;
@@ -13,15 +13,15 @@ public class PropertyDrawerSystemVector3 : PropertyDrawer<System.Numerics.Vector
         ImGui.PushItemWidth(width / 3 - 13.5f);
         ImGui.Text("X");
         ImGui.SameLine();
-        changed |= ImGui.DragFloat("##X", ref v3.X, "%g");
+        changed |= ImGui.DragFloat("##X", ref v3.X, 1);
         ImGui.SameLine();
         ImGui.Text("Y");
         ImGui.SameLine();
-        changed |= ImGui.DragFloat("##Y", ref v3.Y, "%g");
+        changed |= ImGui.DragFloat("##Y", ref v3.Y, 1);
         ImGui.SameLine();
         ImGui.Text("Z");
         ImGui.SameLine();
-        changed |= ImGui.DragFloat("##Z", ref v3.Z, "%g");
+        changed |= ImGui.DragFloat("##Z", ref v3.Z, 1);
         ImGui.PopItemWidth();
         ImGui.Columns(1);
         return changed;

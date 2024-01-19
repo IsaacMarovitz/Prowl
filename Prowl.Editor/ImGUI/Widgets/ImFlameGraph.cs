@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using System.Numerics;
 using Prowl.Runtime;
 using Vector2 = Prowl.Runtime.Vector2;
@@ -19,12 +19,11 @@ namespace Prowl.Editor.ImGUI.Widgets
         {
             unsafe
             {
-                ImGuiWindowPtr window = ImGui.GetCurrentWindow();
-                if (window.SkipItems)
-                    return;
+                ImGuiViewportPtr window = ImGui.GetWindowViewport();
+                // if (window.SkipItems)
+                //     return;
 
-                ImGuiContextPtr g = ImGui.GetCurrentContext();
-                ImGuiStyle style = g.Style;
+                ImGuiStylePtr style = ImGui.GetStyle();
 
                 // Find the maximum depth
                 byte maxDepth = 0;
@@ -41,12 +40,12 @@ namespace Prowl.Editor.ImGUI.Widgets
                 if (graphSize.y == 0.0f)
                     graphSize.y = labelSize.Y + (style.FramePadding.Y * 3) + blockHeight * (maxDepth + 1);
 
-                ImRect frameBB = new ImRect() { Min = window.DC.CursorPos, Max = window.DC.CursorPos + graphSize.ToFloat() };
-                ImRect innerBB = new ImRect() { Min = frameBB.Min + style.FramePadding, Max = frameBB.Max - style.FramePadding };
-                ImRect totalBB = new ImRect() { Min = frameBB.Min, Max = frameBB.Max + new System.Numerics.Vector2(labelSize.X > 0.0f ? style.ItemInnerSpacing.X + labelSize.X : 0.0f, 0) };
-                ImGui.ItemSizeRect(totalBB, style.FramePadding.Y);
-                if (!ImGui.ItemAdd(totalBB, 0, ref frameBB, ImGuiItemFlags.None))
-                    return;
+                // Rect frameBB = new ImRect() { Min = window.DC.CursorPos, Max = window.DC.CursorPos + graphSize.ToFloat() };
+                // ImRect innerBB = new ImRect() { Min = frameBB.Min + style.FramePadding, Max = frameBB.Max - style.FramePadding };
+                // ImRect totalBB = new ImRect() { Min = frameBB.Min, Max = frameBB.Max + new System.Numerics.Vector2(labelSize.X > 0.0f ? style.ItemInnerSpacing.X + labelSize.X : 0.0f, 0) };
+                // ImGui.ItemSizeRect(totalBB, style.FramePadding.Y);
+                // if (!ImGui.ItemAdd(totalBB, 0, ref frameBB, ImGuiItemFlags.None))
+                //     return;
 
                 // Determine scale from values if not specified
                 if (scaleMin == float.MaxValue || scaleMax == float.MaxValue)
@@ -71,7 +70,7 @@ namespace Prowl.Editor.ImGUI.Widgets
                         scaleMax = vMax;
                 }
 
-                ImGui.RenderFrame(frameBB.Min, frameBB.Max, ImGui.GetColorU32(ImGuiCol.FrameBg), true, style.FrameRounding);
+                // ImGui.RenderFrame(frameBB.Min, frameBB.Max, ImGui.GetColorU32(ImGuiCol.FrameBg), true, style.FrameRounding);
 
                 bool anyHovered = false;
                 if (valuesCount - valuesOffset >= 1)
@@ -106,47 +105,47 @@ namespace Prowl.Editor.ImGUI.Widgets
                         float startX = start / duration;
                         float endX = end / duration;
 
-                        float width = innerBB.Max.X - innerBB.Min.X;
-                        float height;
-                        if (flip) {
-                            height = blockHeight * (maxDepth - depth + 1) - style.FramePadding.Y;
-                        } else {
-                            height = blockHeight * (depth + 1) - style.FramePadding.Y;
-                        }
+                        // float width = innerBB.Max.X - innerBB.Min.X;
+                        // float height;
+                        // if (flip) {
+                        //     height = blockHeight * (maxDepth - depth + 1) - style.FramePadding.Y;
+                        // } else {
+                        //     height = blockHeight * (depth + 1) - style.FramePadding.Y;
+                        // }
+                        //
+                        // Vector2 pos0 = innerBB.Min + new System.Numerics.Vector2(startX * width, height);
+                        // Vector2 pos1 = innerBB.Min + new System.Numerics.Vector2(endX * width, height + blockHeight);
 
-                        Vector2 pos0 = innerBB.Min + new System.Numerics.Vector2(startX * width, height);
-                        Vector2 pos1 = innerBB.Min + new System.Numerics.Vector2(endX * width, height + blockHeight);
-
-                        bool vHovered = false;
-                        if (ImGui.IsMouseHoveringRect(pos0, pos1)) {
-                            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
-                                if (selected == i)
-                                    selected = -1;
-                                else
-                                    selected = i;
-                            }
-                            ImGui.SetTooltip($"{caption}: {stageEnd - stageStart:0.####}");
-                            vHovered = true;
-                            anyHovered = vHovered;
-                        }
-
-                        window.DrawList.AddRectFilled(pos0, pos1, vHovered ? colHovered : colBase);
-                        window.DrawList.AddRect(pos0, pos1, vHovered ? colOutlineHovered : colOutlineBase);
-                        Vector2 textSize = ImGui.CalcTextSize(caption);
-                        Vector2 boxSize = pos1 - pos0;
-                        if (textSize.x < boxSize.x)
-                        {
-                            Vector2 textOffset = new Vector2(0.5f, 0.5f) * (boxSize - textSize);
-                            ImGui.RenderText(pos0 + textOffset, caption, "", false);
-                        }
+                        // bool vHovered = false;
+                        // if (ImGui.IsMouseHoveringRect(pos0, pos1)) {
+                        //     if (ImGui.IsMouseClicked(ImGuiMouseButton.Left)) {
+                        //         if (selected == i)
+                        //             selected = -1;
+                        //         else
+                        //             selected = i;
+                        //     }
+                        //     ImGui.SetTooltip($"{caption}: {stageEnd - stageStart:0.####}");
+                        //     vHovered = true;
+                        //     anyHovered = vHovered;
+                        // }
+                        //
+                        // window.DrawList.AddRectFilled(pos0, pos1, vHovered ? colHovered : colBase);
+                        // window.DrawList.AddRect(pos0, pos1, vHovered ? colOutlineHovered : colOutlineBase);
+                        // Vector2 textSize = ImGui.CalcTextSize(caption);
+                        // Vector2 boxSize = pos1 - pos0;
+                        // if (textSize.x < boxSize.x)
+                        // {
+                        //     Vector2 textOffset = new Vector2(0.5f, 0.5f) * (boxSize - textSize);
+                        //     ImGui.RenderText(pos0 + textOffset, caption, "", false);
+                        // }
                     }
 
                     // Text overlay
-                    if (overlayText != null)
-                        ImGui.RenderTextClipped(new Vector2(frameBB.Min.X, frameBB.Min.Y + style.FramePadding.Y), frameBB.Max, overlayText, "", null, new Vector2(0.5f, 0.0f), null);
-
-                    if (labelSize.X > 0.0f)
-                        ImGui.RenderText(new Vector2(frameBB.Max.X + style.ItemInnerSpacing.X, innerBB.Min.Y), label, "", false);
+                    // if (overlayText != null)
+                    //     ImGui.RenderTextClipped(new Vector2(frameBB.Min.X, frameBB.Min.Y + style.FramePadding.Y), frameBB.Max, overlayText, "", null, new Vector2(0.5f, 0.0f), null);
+                    //
+                    // if (labelSize.X > 0.0f)
+                    //     ImGui.RenderText(new Vector2(frameBB.Max.X + style.ItemInnerSpacing.X, innerBB.Min.Y), label, "", false);
                 }
 
                 if (!anyHovered && ImGui.IsItemHovered())

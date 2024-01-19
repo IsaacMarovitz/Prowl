@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Editor.Assets;
 using Prowl.Editor.ImGUI.Widgets;
 using Prowl.Icons;
@@ -192,7 +192,7 @@ public class AssetBrowserWindow : EditorWindow {
     {
         ImGui.PushID(i);
         ImGui.SetCursorPos(curPos);
-        ImGui.BeginChild("ClipBox", new System.Numerics.Vector2(ThumbnailSize, ThumbnailSize), false, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
+        ImGui.BeginChild("ClipBox", new System.Numerics.Vector2(ThumbnailSize, ThumbnailSize), ImGuiChildFlags.None, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
         RenderFileSystemEntry(entry);
         ImGui.EndChild();
 
@@ -202,7 +202,8 @@ public class AssetBrowserWindow : EditorWindow {
             if (pingTimer > PingDuration - 1f) {
                 // For the first second lock scroll to the target file and directory
                 CurDirectory = pingedFile.Directory;
-                ImGui.ScrollToItem(ImGuiScrollFlags.None);
+                //ImGui.SetScrollY();
+                // ImGui.ScrollToItem(ImGuiScrollFlags.None);
             }
             GUIHelper.ItemRect(1f, 0.8f, 0.0f, 0.8f, MathF.Sin(pingTimer) * 1f, 3f, 2.5f);
             GUIHelper.ItemRect(1f, 0.8f, 0.0f, 0.8f, MathF.Sin(pingTimer) * 6f, 3f, 2.5f);

@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using Prowl.Editor.Assets;
 using Prowl.Editor.ImGUI.Widgets;
 using Prowl.Icons;

@@ -1,4 +1,4 @@
-using HexaEngine.ImGuiNET;
+using ImGuiNET;
 using System.Numerics;
 
 namespace Prowl.Editor.EditorWindows;
@@ -17,7 +17,7 @@ public class EditorWindow {
     protected virtual bool LockSize { get; } = false;
     protected virtual bool BackgroundFade { get; } = false;
 
-    protected ImGuiWindowPtr ImGUIWindow { get; private set; }
+    protected ImGuiViewportPtr ImGUIWindow { get; private set; }
 
     protected bool isOpened = true;
 
@@ -37,7 +37,7 @@ public class EditorWindow {
         else
             _WindowCounter.Add(t, 0);
     }
-    
+
     private void DrawWindow() {
         isOpened = true;
 
@@ -79,10 +79,10 @@ public class EditorWindow {
         else
             ImGui.Begin(Title, ref isOpened, Flags);
 
-        ImGUIWindow = ImGui.GetCurrentWindow();
+        ImGUIWindow = ImGui.GetWindowViewport();
 
         DrawToolbar();
-        
+
         Draw();
         ImGui.End();
         ImGui.PopID();
@@ -96,7 +96,7 @@ public class EditorWindow {
             Close();
         }
     }
-    
+
     private void UpdateWindow() {
         Update();
     }
@@ -106,9 +106,9 @@ public class EditorWindow {
 
     protected virtual void DrawToolbar() {
     }
-    
+
     protected virtual void Draw() { }
     protected virtual void Update() { }
     protected virtual void Close() { }
-    
+
 }

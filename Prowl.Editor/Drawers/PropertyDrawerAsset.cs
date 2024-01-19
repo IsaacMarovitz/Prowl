@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using Prowl.Icons;
 using Prowl.Runtime;
 using Prowl.Runtime.Assets;
@@ -21,21 +21,21 @@ public class PropertyDrawerAsset : PropertyDrawer<IAssetRef>
         string path;
         if (value.IsExplicitNull) {
             path = "(Null)";
-            if (ImGui.Selectable($"{Name}: {path}", Selected == this, new System.Numerics.Vector2(width, 17))) {
+            if (ImGui.Selectable($"{Name}: {path}", Selected == this, ImGuiSelectableFlags.None)) {
                 Selected = this;
 #warning TODO: Show a popup with a list of all assets of the type - property.Type.Name
             }
             GUIHelper.ItemRectFilled(0.9f, 0.1f, 0.1f, 0.3f);
         } else if (value.IsRuntimeResource) {
             path = "(Runtime)" + value.Name;
-            if (ImGui.Selectable($"{Name}: {path}", Selected == this, new System.Numerics.Vector2(width, 17))) {
+            if (ImGui.Selectable($"{Name}: {path}", Selected == this, ImGuiSelectableFlags.None)) {
                 Selected = this;
 #warning TODO: Show a popup with a list of all assets of the type - property.Type.Name
             }
             GUIHelper.ItemRectFilled(0.1f, 0.1f, 0.9f, 0.3f);
         } else if (AssetDatabase.Contains(value.AssetID)) {
             path = AssetDatabase.GUIDToAssetPath(value.AssetID);
-            if (ImGui.Selectable($"{Name}: {path}", Selected == this, new System.Numerics.Vector2(width, 17))) {
+            if (ImGui.Selectable($"{Name}: {path}", Selected == this, ImGuiSelectableFlags.None)) {
                 AssetDatabase.Ping(value.AssetID);
                 Selected = this;
             }

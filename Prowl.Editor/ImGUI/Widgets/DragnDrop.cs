@@ -1,4 +1,4 @@
-﻿using HexaEngine.ImGuiNET;
+﻿using ImGuiNET;
 using Prowl.Runtime;
 
 namespace Prowl.Editor.ImGUI.Widgets
@@ -17,7 +17,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             {
                 ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.25f, 0.25f, 0.25f, 0.25f)));
                 ImGuiPayloadPtr entityPayload = ImGui.AcceptDragDropPayload(AssetPayload + typeof(T).Name);
-                if (!entityPayload.IsNull)
+                if (!entityPayload.Equals(null))
                 {
                     droppedAsset = new AssetRef<T>((Guid)draggedObject);
                     ImGui.EndDragDropTarget();
@@ -36,7 +36,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             {
                 ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.25f, 0.25f, 0.25f, 0.25f)));
                 ImGuiPayloadPtr entityPayload = ImGui.AcceptDragDropPayload(AssetPayload + typeName);
-                if (!entityPayload.IsNull)
+                if (!entityPayload.Equals(null))
                 {
                     droppedAsset = (Guid)draggedObject;
                     ImGui.EndDragDropTarget();
@@ -55,7 +55,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             {
                 ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), ImGui.GetColorU32(new Vector4(0.25f, 0.25f, 0.25f, 0.25f)));
                 ImGuiPayloadPtr entityPayload = ImGui.AcceptDragDropPayload(ReferencePayload + typeof(T).Name);
-                if (!entityPayload.IsNull)
+                if (!entityPayload.Equals(null))
                 {
                     droppedObject = (T)draggedObject;
                     ImGui.EndDragDropTarget();
@@ -72,7 +72,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             if (ImGui.BeginDragDropSource())
             {
                 draggedObject = offeredAsset.AssetID;
-                unsafe { ImGui.SetDragDropPayload(AssetPayload + typeof(T).Name, null, 0); }
+                unsafe { ImGui.SetDragDropPayload(AssetPayload + typeof(T).Name, IntPtr.Zero, 0); }
                 ImGui.TextUnformatted(offeredAsset.Name + " - " + offeredAsset.AssetID);
                 ImGui.EndDragDropSource();
                 return true;
@@ -85,7 +85,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             if (ImGui.BeginDragDropSource())
             {
                 draggedObject = offeredAsset;
-                unsafe { ImGui.SetDragDropPayload(AssetPayload + typeName, null, 0); }
+                unsafe { ImGui.SetDragDropPayload(AssetPayload + typeName, IntPtr.Zero, 0); }
                 ImGui.TextUnformatted(typeName + " - Asset");
                 ImGui.EndDragDropSource();
                 return true;
@@ -98,7 +98,7 @@ namespace Prowl.Editor.ImGUI.Widgets
             if (ImGui.BeginDragDropSource())
             {
                 draggedObject = offeredObject;
-                unsafe { ImGui.SetDragDropPayload(ReferencePayload + typeof(T).Name, null, 0); }
+                unsafe { ImGui.SetDragDropPayload(ReferencePayload + typeof(T).Name, IntPtr.Zero, 0); }
                 ImGui.TextUnformatted(typeof(T).Name + " - Instance");
                 ImGui.EndDragDropSource();
                 return true;
